@@ -1,0 +1,25 @@
+#modules
+ https://docs.ansible.com/ansible/latest/modules/modules_by_category.html
+ 
+https://docs.ansible.com/ansible/latest/user_guide/playbooks_strategies.html
+  # check serial mainly
+https://docs.ansible.com/ansible/latest/modules/haproxy_module.html
+#  pre-tasks , post-task and task delegation to local
+
+#wait-for       --> very useful for deployment purposes. 
+   name: Waits for port 8000 of any IP to close active connections, don't start checking for 10 seconds
+  wait_for:
+    host: 0.0.0.0
+    port: 8000
+    delay: 10
+    state: drained
+    #################################################################
+    #########   anible-vault  #######################################
+    
+    ansible-vault encrypt file-name
+     file file-name  --> file will be in ASCII test
+     
+     ansible-playbook --help | grep -i vault
+
+    
+  
