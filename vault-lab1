@@ -1,0 +1,43 @@
+LAB 1: Encrypting and decrypting with single key
+Section 12, Lecture 109
+Encrypting and decrypting with single key
+mkdir vault
+file: vault/api_keys
+
+USER: devops
+API_KEY: GUIFEHR3485y384H78435YYF89GUW03RIUWFHI
+TOKEN: 8549JBHBHUPIYHSL602JHU
+Encrypting file
+
+cd vault
+ansible-vault encrypt api_keys
+cat api_keys
+ansible-vault view api_keys
+write a playbook to use encrypted file
+
+file: test_vault.yml
+
+---
+  - name: testing ansible vault
+    hosts: 'local:app'
+    become: true
+    tasks:
+      - name: copy a file containing api keys
+        copy:
+          src: vault/api_keys
+          dest: /root/.api_keys
+          owner: root
+          group: root
+          mode: 0400
+apply
+
+ansible-playbook test_vault.yml
+ansible-playbook test_vault.yml --ask-vault-pass
+Using a password file
+
+file ~/.vault
+
+password1
+profile passowrd file
+
+ansible-playbook test_vault.yml --vault-password-file ~/.vault
