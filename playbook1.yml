@@ -1,0 +1,39 @@
+---
+- name: set overrides for apt.conf
+  template:
+    dest: /etc/apt/apt.conf.d/devpack
+    src: apt.conf.j2
+    owner: root
+    group: root
+    mode: 0444
+
+- name: set apt-get wrapper
+  template:
+    dest: /usr/local/bin/somc-apt-get.sh
+    src: somc-apt-get.j2
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Enable i386 architecture
+  command: dpkg --add-architecture i386
+  when: "'i386' not in ansible_local.somc.apt_archs"
+
+- name: Add repository key to trusted keys
+  apt_key:
+    id: '{{ item.key.id }}'
+    url: '{{ item.key.url }}'
+    keyring: '/etc/apt/trusted.gpg.d/{{ item.name }}.gpg'
+    state: present
+  with_items:
+    - '{{ repositories }}'
+
+- name: Add private APT repository
+  apt_repository:
+    repo: 'deb {{ item.option }} {{ item.url }} {{ item.suite }} {{ item.component }}'
+    state: present
+    filename: '{{ item.name }}'
+    update_cache: no
+  with_items:
+    - '{{ repositories }}'
+    
